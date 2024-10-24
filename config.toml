@@ -1,6 +1,6 @@
 image_size = 512
 batch_size = 8
-device = "mps"
+device = "cpu"
 test = false
 num_layers = 4
 resnet_layers = 2
