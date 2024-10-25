@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pneumonia Detection</title>
+    <script>
+        async function uploadAndPredict(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.querySelector('input[type="file"]');
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const resultContainer = document.getElementById('result');
+            
+            if (result.prediction == 1) {
+                resultContainer.innerHTML = `<h3>Pneumonia Positive. Confidence: ${result.confidence}</h3>`;
+            } else {
+                resultContainer.innerHTML = `<h3>Normal. Pneumonia not detected. Confidence: ${result.confidence}%</h2>`;
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Pneumonia Detection using Vision Transformer</h1>
-    <form action="/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*">
+    <form onsubmit="uploadAndPredict(event)" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
         <button type="submit">Upload and Predict</button>
     </form>
+    <div id="result"></div>
 </body>
 </html>
